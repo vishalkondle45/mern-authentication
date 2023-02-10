@@ -1,11 +1,14 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const app = express();
 
-app.use("/", (req, res, next) => {
-  res.send("Hello There!");
-});
-
-app.listen(5000, () => {
-  console.log("Listining to localhost 5000");
-});
+mongoose
+  .connect(
+    "mongodb+srv://mern:mern@cluster0.ayvj5pf.mongodb.net/mern-authentication?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    app.listen(5000);
+    console.log("Database is connected! Listening to localhost 5000");
+  })
+  .catch((err) => console.log(err));
