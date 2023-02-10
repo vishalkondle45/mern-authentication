@@ -2,6 +2,19 @@ const User = require("../models/User");
 
 const signup = async (req, res, next) => {
   const { name, email, password } = req.body;
+  let existingUser;
+
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (error) {
+    console.log(error);
+  }
+  if (existingUser) {
+    return res
+      .status(400)
+      .json({ message: "User already exists! Login instead" });
+  }
+
   const user = new User({
     name,
     email,
