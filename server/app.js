@@ -1,8 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const router = require("./routes/user-routes");
 
 const app = express();
 
+app.use("/api", router);
 mongoose
   .connect(
     "mongodb+srv://mern:mern@cluster0.ayvj5pf.mongodb.net/mern-authentication?retryWrites=true&w=majority"
