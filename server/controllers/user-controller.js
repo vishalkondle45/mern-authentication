@@ -31,4 +31,29 @@ const signup = async (req, res, next) => {
   return res.status(201).json({ message: user });
 };
 
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  let existingUser;
+
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (error) {
+    console.log(error);
+  }
+  if (!existingUser) {
+    return res
+      .status(404)
+      .json({ message: "User not found! Signup Please." });
+  }
+  const isCorrectPassword = bcrypt.compareSync(password, existingUser.password)
+  if(!isCorrectPassword){
+    return res
+      .status(401)
+      .json({ message: "Email or Password is incorrect." });
+  }
+
+  return res.status(200).json({ message: "Successfully Logged In" });
+};
+
 exports.signup = signup;
+exports.login = login;
