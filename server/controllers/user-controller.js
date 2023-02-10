@@ -73,6 +73,21 @@ const verifyToken = async (req, res, next) => {
   next();
 };
 
+const getUser = async (req, res, next) => {
+  const userId = req.id;
+  let user;
+  try {
+    user = await User.findById(userId, "-password");
+  } catch (error) {
+    return new Error(error);
+  }
+  if (!user) {
+    return res.status(404).json({ message: "User not found!" });
+  }
+  return res.status(200).json({ user });
+};
+
 exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
+exports.getUser = getUser;
