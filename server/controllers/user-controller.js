@@ -53,14 +53,25 @@ const login = async (req, res, next) => {
     expiresIn: "1hr",
   });
 
+  res.cookie(String(existingUser._id), token, {
+    path: "/",
+    expires: new Date(Date.now() + 1000 * 30),
+    sameSite: "lax",
+    httpOnly: true,
+  });
+
   return res
     .status(200)
     .json({ message: "Successfully Logged In", user: existingUser, token });
 };
 
 const verifyToken = async (req, res, next) => {
-  const headers = req.headers["authorization"];
-  const token = headers.split(" ")[1];
+  // const headers = req.headers["authorization"];
+  // const token = headers.split(" ")[1];
+
+  const cookies = req.headers.cookie;
+  const token = cookies.split("=")[1];
+
   if (!token) {
     return res.status(404).json({ message: "Token not found!" });
   }
