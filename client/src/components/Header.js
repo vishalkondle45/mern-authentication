@@ -1,5 +1,6 @@
 import { Tabs } from "@mantine/core";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -9,8 +10,12 @@ const Header = () => {
           <Tabs.Tab value="title" disabled mr={"auto"}>
             <h2>MERN - Authentication</h2>
           </Tabs.Tab>
-          <Tabs.Tab value="login">Login</Tabs.Tab>
-          <Tabs.Tab value="signup">Signup</Tabs.Tab>
+          <Tabs.Tab to="/login" value="login" component={Link}>
+            Login
+          </Tabs.Tab>
+          <Tabs.Tab to="/signup" value="signup" component={Link}>
+            Signup
+          </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="login" pt="xs">
