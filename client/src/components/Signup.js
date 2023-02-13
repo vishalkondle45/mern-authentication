@@ -1,7 +1,11 @@
 import { TextInput, Button, Group, Box, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
+  const history = useNavigate();
+
   const form = useForm({
     initialValues: {
       name: "",
@@ -16,8 +20,13 @@ function Signup() {
     },
   });
 
-  const handleSubmit = (values) => {
-    console.log(values);
+  const handleSubmit = async (values) => {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/signup",
+      values
+    );
+    console.log(data);
+    history.push("/login");
   };
 
   return (
