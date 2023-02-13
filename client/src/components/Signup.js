@@ -26,7 +26,7 @@ function Signup() {
       values
     );
     console.log(data);
-    history.push("/login");
+    history("/login");
   };
 
   return (
