@@ -20,7 +20,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/user" element={<Welcome />} />
+        {isLoggedIn && <Route path="/user" element={<Welcome />} />}
       </Routes>
     </MantineProvider>
   );
