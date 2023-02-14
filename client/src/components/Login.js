@@ -1,11 +1,13 @@
 import { TextInput, Button, Group, Box, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { authActions } from "../store";
 
 function Login() {
   const history = useNavigate();
-
+  const dispatch = useDispatch();
   const form = useForm({
     initialValues: {
       email: "",
@@ -19,11 +21,11 @@ function Login() {
   });
 
   const handleSubmit = async (values) => {
-    const { data } = await axios.post(
-      "http://localhost:5000/api/login",
-      values
-    );
-    console.log(data);
+    await axios
+      .post("http://localhost:5000/api/login", values)
+      .catch((error) => console.log(error));
+
+    dispatch(authActions.login());
     history("/user");
   };
 
