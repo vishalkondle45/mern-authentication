@@ -21,12 +21,12 @@ function Signup() {
   });
 
   const handleSubmit = async (values) => {
-    const { data } = await axios.post(
-      "http://localhost:5000/api/signup",
-      values
-    );
-    console.log(data);
-    history("/login");
+    await axios
+      .post("http://localhost:5000/api/signup", values)
+      .then((res) => {
+        history("/login");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

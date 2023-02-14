@@ -53,7 +53,7 @@ const login = async (req, res, next) => {
     expiresIn: "35s",
   });
 
-  console.log("Generated Token \n ", token);
+  // console.log("Generated Token \n ", token);
 
   if (req.cookies[`${existingUser._id}`]) {
     req.cookies[`${existingUser._id}`] = "";
@@ -122,7 +122,7 @@ const refreshToken = async (req, res, next) => {
       expiresIn: "35s",
     });
 
-    console.log("ReGenerated Token \n ", token);
+    // console.log("ReGenerated Token \n ", token);
 
     res.cookie(String(user.id), token, {
       path: "/",

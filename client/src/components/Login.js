@@ -23,10 +23,11 @@ function Login() {
   const handleSubmit = async (values) => {
     await axios
       .post("http://localhost:5000/api/login", values)
+      .then((res) => {
+        dispatch(authActions.login());
+        history("/user");
+      })
       .catch((error) => console.log(error));
-
-    dispatch(authActions.login());
-    history("/user");
   };
 
   return (
