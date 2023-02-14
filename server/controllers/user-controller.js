@@ -49,9 +49,16 @@ const login = async (req, res, next) => {
   if (!isCorrectPassword) {
     return res.status(401).json({ message: "Email or Password is incorrect." });
   }
+
   const token = jwt.sign({ id: existingUser._id }, SECRET_KEY, {
-    expiresIn: "1hr",
+    expiresIn: "35s",
   });
+
+  console.log("Generated Token \n ", token);
+
+  if (req.cookies[`${existingUser._id}`]) {
+    req.cookies[`${existingUser._id}`] = "";
+  }
 
   res.cookie(String(existingUser._id), token, {
     path: "/",
@@ -98,7 +105,39 @@ const getUser = async (req, res, next) => {
   return res.status(200).json({ user });
 };
 
+const refreshToken = async (req, res, next) => {
+  const cookies = req.headers.cookie;
+  const prevToken = cookies.split("=")[1];
+
+  if (!prevToken) {
+    return res.status(404).json({ message: "Token not found!" });
+  }
+  jwt.verify(String(prevToken), SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid Token" });
+    }
+    res.clearCookie(`${user.id}`);
+    req.cookies[`${user.id}`] = "";
+
+    const token = jwt.sign({ id: user.id }, SECRET_KEY, {
+      expiresIn: "35s",
+    });
+
+    console.log("ReGenerated Token \n ", token);
+
+    res.cookie(String(user.id), token, {
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 30),
+      sameSite: "lax",
+      httpOnly: true,
+    });
+    req.id = user.id;
+    next();
+  });
+};
+
 exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getUser = getUser;
+exports.refreshToken = refreshToken;
