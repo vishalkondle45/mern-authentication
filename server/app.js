@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router = require("./routes/user-routes");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use("/api", router);
 mongoose.set("strictQuery", false);
 mongoose
   .connect(
-    "mongodb+srv://mern:mern@cluster0.ayvj5pf.mongodb.net/mern-authentication?retryWrites=true&w=majority"
+    `mongodb+srv://mern:${process.env.MONGO_PASS}@cluster0.ayvj5pf.mongodb.net/mern-authentication?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(5000);

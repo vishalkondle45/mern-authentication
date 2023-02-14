@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "Vammavg@78";
 
 const signup = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -50,7 +49,7 @@ const login = async (req, res, next) => {
     return res.status(401).json({ message: "Email or Password is incorrect." });
   }
 
-  const token = jwt.sign({ id: existingUser._id }, SECRET_KEY, {
+  const token = jwt.sign({ id: existingUser._id }, process.env.SECRET_KEY, {
     expiresIn: "35s",
   });
 
@@ -82,7 +81,7 @@ const verifyToken = async (req, res, next) => {
   if (!token) {
     return res.status(404).json({ message: "Token not found!" });
   }
-  jwt.verify(String(token), SECRET_KEY, (err, user) => {
+  jwt.verify(String(token), process.env.SECRET_KEY, (err, user) => {
     if (err) {
       return res.status(401).json({ message: "Invalid Token" });
     }
@@ -112,14 +111,14 @@ const refreshToken = async (req, res, next) => {
   if (!prevToken) {
     return res.status(404).json({ message: "Token not found!" });
   }
-  jwt.verify(String(prevToken), SECRET_KEY, (err, user) => {
+  jwt.verify(String(prevToken), process.env.SECRET_KEY, (err, user) => {
     if (err) {
       return res.status(401).json({ message: "Invalid Token" });
     }
     res.clearCookie(`${user.id}`);
     req.cookies[`${user.id}`] = "";
 
-    const token = jwt.sign({ id: user.id }, SECRET_KEY, {
+    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
       expiresIn: "35s",
     });
 
